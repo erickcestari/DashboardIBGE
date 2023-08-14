@@ -34,10 +34,10 @@ const Home = () => {
   const getData = async () => {
     try {
       const response = await axios.get(`${teste}`);
-      const dataFormated = response.data[0].resultados.map(res => res.series[1].serie['2018']);
+      const dataFormated = response.data[0].resultados.map((res: any) => res.series[1].serie['2018']);
       setData(dataFormated);
       console.log()
-      const ydatas = response.data[0].resultados.map(res => (res.classificacoes[0].categoria))
+      const ydatas = response.data[0].resultados.map((res: any) => (res.classificacoes[0].categoria))
       const yDataFormated = []
       for (const d of ydatas) {
         for (const key in d) {
@@ -46,7 +46,7 @@ const Home = () => {
           yDataFormated.push(d[key])
         }
       }
-      setYdata(yDataFormated)
+      setYdata(yDataFormated as any)
     } catch (error) {
       console.error('Error fetching data:', error);
     }
@@ -83,7 +83,7 @@ const Home = () => {
         <div className='w-[90%]'>
           <Line
             data={usedData}
-            options={options}
+            options={options as any}
           >
           </Line>
         </div>
