@@ -2,17 +2,27 @@
 
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { Bar, Line } from 'react-chartjs-2';
+
 import {
-  ResponsiveContainer,
-  LineChart,
-  Line,
-  XAxis,
-  YAxis,
-  CartesianGrid,
+  Chart as ChartJS,
+  LineElement,
+  CategoryScale, // x axis
+  LinearScale, // y axis
+  PointElement,
+  Legend,
   Tooltip,
-  BarChart,
-  Bar
-} from 'recharts';
+} from 'chart.js';
+
+ChartJS.register(
+  LineElement,
+  CategoryScale, // x axis
+  LinearScale, // y axis
+  PointElement,
+  Legend,
+  Tooltip,
+)
+
 
 const API_URL = 'https://servicodados.ibge.gov.br/api/v3';
 const teste = 'https://servicodados.ibge.gov.br/api/v3/agregados/7362/periodos/-6/variaveis/2503?localidades=N1[all]|N2[4]&classificacao=1933[all]';
@@ -47,34 +57,38 @@ const Home = () => {
   }, []);
   const chartData: any = []
 
-  yData.map((y, index) => chartData.push({ y: data[index], x: y }))
-
+  const options = {
+    plugins: {
+      legend: true,
+    }
+  }
   console.log(chartData)
 
+  const usedData = {
+    labels: yData,
+    datasets: [{
+      label: 'Expectativa de Vida',
+      data: data,
+      backgroundColor: 'rgba(255, 99, 132, 0.2)',
+      borderColor: 'rgba(255, 99, 132, 1)',
+      pointBorderColor: 'rgba(255, 99, 132, 1)',
+      tension: 0.1,
+    }]
+  }
+
   return (
-    <div>
-    <h1>Dashboard de Expectativa de Vida</h1>
-    <div style={{ maxWidth: '80%', margin: '0 auto' }}>
-      <ResponsiveContainer >
-        <LineChart data={chartData}>
-          <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey="x" height={40} label={{ value: 'Anos', position: 'insideBottom', offset: 5 }} />
-          <YAxis tickFormatter={value => value.toLocaleString()} label={{ value: 'População', angle: -90, position: 'insideLeft' }} />
-          <Tooltip />
-          <Line dataKey="y" stroke="#FF5722" strokeWidth={1} dot={false} />
-        </LineChart>
-      </ResponsiveContainer>
-      <ResponsiveContainer >
-        <BarChart data={chartData} layout="vertical">
-          <CartesianGrid strokeDasharray="3 3" />
-          <XAxis type="number" tickFormatter={value => value.toLocaleString()} />
-          <YAxis dataKey="x" type="category" />
-          <Tooltip />
-          <Bar dataKey="y" fill="#FF5722" />
-        </BarChart>
-      </ResponsiveContainer>
+    <div className='h-screen bg-slate-700'>
+      <h1>Dashboard de Expectativa de Vida</h1>
+      <div className='flex justify-center'>
+        <div className='w-[90%]'>
+          <Line
+            data={usedData}
+            options={options}
+          >
+          </Line>
+        </div>
+      </div>
     </div>
-  </div>
   );
 };
 
