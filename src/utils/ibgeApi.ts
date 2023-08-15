@@ -1,5 +1,17 @@
 import axios from "axios";
 
+export const orderObjectByAlphabeticalOrder = (object: any) => {
+
+  const arraySorted = Object.keys(object).sort((a, b) => a.localeCompare(b));
+    const sortedAllObject: any = {};
+
+    for (const key of arraySorted) {
+      sortedAllObject[key] = object[key];
+    }
+
+    return sortedAllObject
+}
+
 
 export const getAllLocalities = async () => {
   try {
@@ -23,7 +35,14 @@ export const getAllLocalities = async () => {
       }
     }
 
-    return allLocalities
+    const sortedKeys = Object.keys(allLocalities).sort((a, b) => a.localeCompare(b));
+    const sortedAllLocalities: any = {};
+
+    for (const key of sortedKeys) {
+      sortedAllLocalities[key] = allLocalities[key];
+    }
+
+    return sortedAllLocalities
 
   } catch (error) {
     console.error('Error fetching data:', error);

@@ -18,6 +18,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
+      <link rel="icon" href="./favicon.png" sizes="any" />
       <body className={inter.className}><MuiTheme>{children}</MuiTheme></body>
     </html>
   )
