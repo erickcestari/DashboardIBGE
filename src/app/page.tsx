@@ -170,8 +170,8 @@ const Home = () => {
       </div>
       <div className='flex bg-slate-300 text-white rounded-lg'>
         <Select color='error' defaultValue={state}>
-          <MenuItem value={'Brasil'} onClick={() => setState('BR')}>Brasil</MenuItem>
-          <MenuItem value={'Santa Catarina'} onClick={() => setState('SC')}>Santa Catarina</MenuItem>
+          <MenuItem value={'BR'} onClick={() => setState('BR')}>Brasil</MenuItem>
+          <MenuItem value={'SC'} onClick={() => setState('SC')}>Santa Catarina</MenuItem>
         </Select>
       </div>
       <div className='flex bg-slate-300 text-white rounded-lg'>
