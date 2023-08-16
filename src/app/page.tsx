@@ -17,6 +17,7 @@ import {
   RadialLinearScale,
   Tooltip
 } from 'chart.js';
+import { SearchWeb } from 'mdi-material-ui';
 import { SyntheticEvent, useCallback, useEffect, useState } from 'react';
 import { Bar, Line, PolarArea } from 'react-chartjs-2';
 
@@ -84,11 +85,11 @@ const Home = () => {
   const [loading, setLoading] = useState(false);
   const [variavel, setVariavel] = useState('Leite');
 
-  const handleChangeLocalite = (event: SyntheticEvent<Element, Event>, newValue : string | null) => {
+  const handleChangeLocalite = (event: SyntheticEvent<Element, Event>, newValue: string | null) => {
     setLocalite(newValue || '');
   }
 
-  const handleChangeVariavel = (event: SyntheticEvent<Element, Event>, newValue : string | null) => {
+  const handleChangeVariavel = (event: SyntheticEvent<Element, Event>, newValue: string | null) => {
     setVariavel(newValue || '');
   }
 
@@ -100,7 +101,7 @@ const Home = () => {
 
       setLoading(true)
       const count = urls.findIndex((url) => url.name === variavel)
-      url = urls[count].url.replace('localidades', `localidades=${localites[localite as any] || ''}`)
+      url = urls[count].url.replace('localidades', `localidades=${localites[localite as any] || 'N1[all]'}`)
 
       const response = await axios.get(url);
       dataFormated = response.data[0].resultados.map((res: any, index: number) => res.series[0].serie);
@@ -112,7 +113,7 @@ const Home = () => {
           key.length >= 6 ? ydatas.push(key.slice(0, 4) + ' ' + key.slice(4, 6) + '° trimestre') : ydatas.push(key)
         }
       }
-      
+
       setLoading(false)
       setTitle(response.data[0].variavel)
       setUnity(response.data[0].unidade)
@@ -120,8 +121,9 @@ const Home = () => {
       setYdata(ydatas as any)
 
     } catch (error) {
-      setTitle('')
       setLoading(false)
+      setTitle('')
+      setUnity('')
       console.error('Error fetching data:', error);
     }
   }, [localite, localites, variavel])
@@ -137,7 +139,7 @@ const Home = () => {
 
   useEffect(() => {
     getData();
-  }, [getData]);
+  }, [getData, localites]);
 
 
   const options = {
@@ -165,47 +167,52 @@ const Home = () => {
   }
 
   return (
-    <div className='min-h-screen w-screen bg-slate-700 flex flex-col align-middle justify-center'>
-      <div className='flex justify-center gap-10 mb-4'>
-        <div>
-          <h2 className='text-lg font-bold'>Localidade: </h2>
-          <div className='flex rounded-lg'>
-            <Autocomplete
-              ListboxComponent={ListboxComponent}
-              disableListWrap
-              sx={{ width: {sm:100, lg:300} }}
-              value={localite}
-              options={Object.keys(localites)}
-              onChange={handleChangeLocalite}
-              renderOption={(props, option, state) =>
-                [props, option, state.index] as React.ReactNode
-              }
-              renderInput={(params) => <TextField {...params} />}
-            />
-          </div>
-        </div>
-        <div>
-          <h2 className='text-lg font-bold'>Variável: </h2>
-          <div className='flex rounded-lg'>
-          <Autocomplete
-              ListboxComponent={ListboxComponent}
-              disableListWrap
-              sx={{ width: {sm:100, lg:300} }}
-              value={variavel}
-              loading={Object.keys(localites).length === 0}
-              options={urls.map((url) => url.name).sort((a, b) => a.localeCompare(b))}
-              onChange={handleChangeVariavel}
-              renderGroup={(params) => params.children}
-              renderOption={(props, option, state) =>
-                [props, option, state.index] as React.ReactNode
-              }
-              renderInput={(params) => <TextField {...params} />}
-            />
+    <div className='min-h-screen w-screen bg-slate-700 flex flex-col'>
+      <div className='flex justify-center mt-10 gap-10 mb-4'>
+        <div className='flex flex-col'>
+          <h1>Dados IBGE</h1>
+          <div className='flex'>
+            <div>
+              <h2 className='text-lg font-bold'>Localidade: </h2>
+              <div className='flex rounded-lg'>
+                <Autocomplete
+                  ListboxComponent={ListboxComponent}
+                  disableListWrap
+                  sx={{ width: { sm: 100, lg: 300 } }}
+                  value={localite}
+                  options={Object.keys(localites)}
+                  onChange={handleChangeLocalite}
+                  renderOption={(props, option, state) =>
+                    [props, option, state.index] as React.ReactNode
+                  }
+                  renderInput={(params) => <TextField {...params} />}
+                />
+              </div>
+            </div>
+            <div>
+              <h2 className='text-lg font-bold'>Variável: </h2>
+              <div className='flex rounded-lg'>
+                <Autocomplete
+                  ListboxComponent={ListboxComponent}
+                  disableListWrap
+                  sx={{ width: { sm: 100, lg: 300 } }}
+                  value={variavel}
+                  loading={Object.keys(localites).length === 0}
+                  options={urls.map((url) => url.name).sort((a, b) => a.localeCompare(b))}
+                  onChange={handleChangeVariavel}
+                  renderGroup={(params) => params.children}
+                  renderOption={(props, option, state) =>
+                    [props, option, state.index] as React.ReactNode
+                  }
+                  renderInput={(params) => <TextField {...params} />}
+                />
+              </div>
+            </div>
           </div>
         </div>
       </div>
-      <div className='flex items-center justify-center flex-col'>
-        <h1 className='text-2xl text-center font-bold'>Dashboard {title}</h1>
+      <div className='flex items-center flex-col text-slate-300'>
+        <h1 className='text-2xl text-center font-bold text-slate-300'>Dashboard {title}</h1>
         <h2 className='text-lg text-center font-bold mt-4'>Unidade: {unity}</h2>
         <div className='flex flex-col justify-center items-center w-max h-1/2 lg:flex-row'>
           {!loading ? (
@@ -217,14 +224,15 @@ const Home = () => {
                 <div className='flex justify-center items-center flex-col w-full lg:w-[33%]'>
                   <Bar data={usedData} options={options as any} />
                 </div>
-                <div className='flex justify-center items-center flex-col w-full lg:w-[33%]'>
+                <div className='flex justify-center items-center flex-col w-full lg:w-[30%]'>
                   <PolarArea data={usedData} options={options2 as any} />
                 </div>
               </div>
             ) : (
               <>
-                <div className='flex flex-col justify-center items-center h-[500px] lg:flex-row'>
-                  <h1 className='text-2xl text-center font-bold'>Não há dados para serem exibidos para {localite}</h1>
+                <div className='flex flex-col justify-center items-center h-[500px] lg:flex-row gap-2'>
+                  <h1 className='text-2xl text-center font-bold'>Não há dados {variavel} para serem exibidos em {localite}</h1>
+                  <SearchWeb />
                 </div>
               </>
             )
