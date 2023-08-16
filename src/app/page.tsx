@@ -171,14 +171,14 @@ const Home = () => {
       <div className='flex justify-center mt-10 gap-10 mb-4'>
         <div className='flex flex-col'>
           <h1>Dados IBGE</h1>
-          <div className='flex'>
+          <div className='flex flex-col lg:flex-row'>
             <div>
               <h2 className='text-lg font-bold'>Localidade: </h2>
               <div className='flex rounded-lg'>
                 <Autocomplete
                   ListboxComponent={ListboxComponent}
                   disableListWrap
-                  sx={{ width: { sm: 100, lg: 300 } }}
+                  sx={{ width: 300}}
                   value={localite}
                   options={Object.keys(localites)}
                   onChange={handleChangeLocalite}
@@ -195,7 +195,7 @@ const Home = () => {
                 <Autocomplete
                   ListboxComponent={ListboxComponent}
                   disableListWrap
-                  sx={{ width: { sm: 100, lg: 300 } }}
+                  sx={{ width:300 }}
                   value={variavel}
                   loading={Object.keys(localites).length === 0}
                   options={urls.map((url) => url.name).sort((a, b) => a.localeCompare(b))}
