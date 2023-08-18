@@ -152,7 +152,24 @@ const Home = () => {
 
   const options = {
     plugins: {
-      legend: true,
+      legend: {
+        display: true,
+        labels: {
+          color: '#fff'
+        }
+      },
+    },
+    scales: {
+      y: {
+        ticks: {
+          color: 'white'
+        }
+      },
+      x: {
+        ticks: {
+          color: 'white'
+        }
+      }
     }
   }
 
@@ -171,6 +188,9 @@ const Home = () => {
       borderColor: 'rgba(255, 99, 132, 1)',
       pointBorderColor: 'rgba(255, 99, 132, 1)',
       tension: 0.1,
+      ticks: {
+        color: "white",
+      },
     }]
   }
 
@@ -202,7 +222,7 @@ const Home = () => {
                     />)}
                   ListboxComponent={ListboxComponent}
                   disableListWrap
-                  sx={{ width: 300}}
+                  sx={{ width: 300 }}
                   value={localite}
                   options={Object.keys(localites)}
                   onChange={handleChangeLocalite}
@@ -217,7 +237,7 @@ const Home = () => {
               <h2 className='text-lg font-bold'>Variável: </h2>
               <div className='flex rounded-lg'>
                 <Autocomplete
-                   PopperComponent={(props) => (
+                  PopperComponent={(props) => (
                     <Popper
                       {...props}
                       sx={{
@@ -234,7 +254,7 @@ const Home = () => {
                       }}
                     />)}
                   disableListWrap
-                  sx={{ width:300 }}
+                  sx={{ width: 300 }}
                   value={variavel}
                   loading={Object.keys(localites).length === 0}
                   options={urls.map((url) => url.name)}
