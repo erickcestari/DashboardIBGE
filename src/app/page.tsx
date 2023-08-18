@@ -115,10 +115,20 @@ const Home = () => {
       dataFormated = response.data[0].resultados.map((res: any, index: number) => res.series[0].serie);
       ydatas = []
       const yDataFormated = []
+      let months = false;
+      const allMonths = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho','Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro']
+      for (const d of dataFormated) {
+        for (const key in d) {
+          if (key.length === 6 && key.slice(4, 6).includes('12')) {
+            months = true
+          }
+        }
+      }
       for (const d of dataFormated) {
         for (const key in d) {
           yDataFormated.push(d[key])
-          key.length >= 6 ? ydatas.push(key.slice(0, 4) + ' ' + key.slice(4, 6) + '° trimestre') : ydatas.push(key)
+          console.log(allMonths[Number(key.slice(4,6))], key.slice(4,6))
+          key.length >= 6 ? months? ydatas.push(key.slice(0, 4) + ' ' + allMonths[Number(key.slice(4,6)) - 1]) : ydatas.push(key.slice(0, 4) + ' ' + key.slice(4, 6) + '° trimestre') : ydatas.push(key)
         }
       }
 
