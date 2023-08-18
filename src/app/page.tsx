@@ -267,7 +267,7 @@ const Home = () => {
                   disableListWrap
                   sx={{ width: 300 }}
                   value={variavel}
-                  loading={Object.keys(localites).length <= 1}
+                  loading={localites.length <= 1}
                   options={urls.map((url) => url.name)}
                   onChange={handleChangeVariavel}
                   renderGroup={(params) => params.children}
