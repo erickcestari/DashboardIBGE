@@ -18,6 +18,7 @@ import {
   Tooltip
 } from 'chart.js';
 import SearchWeb from 'mdi-material-ui/SearchWeb';
+import React from 'react';
 import { SyntheticEvent, useCallback, useEffect, useState } from 'react';
 import { Bar, Line, PolarArea } from 'react-chartjs-2';
 
@@ -90,6 +91,9 @@ const Home = () => {
   const [localite, setLocalite] = useState('Brasil');
   const [loading, setLoading] = useState(false);
   const [variavel, setVariavel] = useState('Leite');
+  const [loadingAutoComplete, setLoadingAutoComplete] = useState(true);
+
+  
 
   const theme = useTheme()
 
@@ -150,6 +154,7 @@ const Home = () => {
       const loc = await getAllLocalities()
 
       setLocalites(loc as any)
+      setLoadingAutoComplete(false)
     }
     fetchData()
   }, [])
@@ -231,6 +236,8 @@ const Home = () => {
                     />)}
                   ListboxComponent={ListboxComponent}
                   disableListWrap
+                  loading={loadingAutoComplete}
+                  disablePortal
                   disableClearable
                   sx={{ width: 300 }}
                   value={localite}
@@ -239,7 +246,16 @@ const Home = () => {
                   renderOption={(props, option, state) =>
                     [props, option, state.index] as React.ReactNode
                   }
-                  renderInput={(params) => <TextField {...params} />}
+                  renderInput={(params) => <TextField {...params} InputProps={{
+                    ...params.InputProps,
+                    endAdornment: (
+                      <React.Fragment>
+                        {loadingAutoComplete ? <CircularProgress color="inherit" size={20} /> : null}
+                        {params.InputProps.endAdornment}
+                      </React.Fragment>
+                    ),
+                  }}/>
+                }
                 />
               </div>
             </div>
@@ -263,15 +279,17 @@ const Home = () => {
                         },
                       }}
                     />)}
+                  disablePortal
                   disableListWrap
                   disableClearable
                   sx={{ width: 300 }}
                   value={variavel}
-                  loading={localites.length <= 1}
+                  loading={loadingAutoComplete}
                   options={urls.map((url) => url.name)}
                   onChange={handleChangeVariavel}
                   renderGroup={(params) => params.children}
-                  renderInput={(params) => <TextField {...params} />}
+                  renderInput={(params) => <TextField {...params} />
+                }
                 />
               </div>
             </div>
