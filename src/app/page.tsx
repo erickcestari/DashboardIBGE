@@ -127,7 +127,6 @@ const Home = () => {
       for (const d of dataFormated) {
         for (const key in d) {
           yDataFormated.push(d[key])
-          console.log(allMonths[Number(key.slice(4,6))], key.slice(4,6))
           key.length >= 6 ? months? ydatas.push(key.slice(0, 4) + ' ' + allMonths[Number(key.slice(4,6)) - 1]) : ydatas.push(key.slice(0, 4) + ' ' + key.slice(4, 6) + '° trimestre') : ydatas.push(key)
         }
       }
@@ -265,6 +264,7 @@ const Home = () => {
                       }}
                     />)}
                   disableListWrap
+                  disableClearable
                   sx={{ width: 300 }}
                   value={variavel}
                   loading={localites.length <= 1}
